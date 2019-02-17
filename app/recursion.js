@@ -9,27 +9,47 @@ recursionAnswers = {
       }
    *
    * Where ... is the same type of object
-   * 
+   *
    * @param {fileSystemObject} data - a file system object as described above
    * @param {String} dirName - a directory name the files are desired to be listed from.
    * Note: This parameter is optional. If it is not provided, list ALL files.
-   * 
+   *
    * @returns {Number[]} The files under the directory dirName, including subdiretories.
    */
   listFiles: function listFiles(data, dirName) {
-
+    let list = [];
+    if (!data) return list;
+    if (data.files) list.push(data.files);
+    if (typeof data === 'object' && data !== null) {
+      const children = Object.keys(data);
+      if (children.length > 0) {
+        for (let i = 0; i < children.length; i++) {
+          list = list.concat(this.listFiles(data[children[i]]));
+        }
+      }
+    }
+    const merged = [].concat.apply([], list);
+    if (dirName) {
+      let newList = [];
+      newList = merged.filter(file => file.indexOf('.js') > -1);
+      return newList;
+    }
+    return merged;
   },
 
   /**
    * Determines the fibonacci number at position n.
    * https://en.wikipedia.org/wiki/Fibonacci_number
-   * 
+   *
    * The first few fibonacci numbers are: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...
-   * 
+   *
    * @param {Number} n - the index of the fibonacci number desired
    * @returns {Number} The nth fibonacci number
    */
   fibonacci: function fibonacci(n) {
-
+    if (n > 2) {
+      return fibonacci(n - 2) + fibonacci(n - 1);
+    }
+    return 1;
   },
 };
