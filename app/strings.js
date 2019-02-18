@@ -9,7 +9,10 @@ stringsAnswers = {
    * @param {Number} amount - The maximum number of adjacent repeated letters in the result string.
    * @returns {String} A string with no more than amount number of repeated letters.
    */
-  reduceString: function reduceString(str, amount) {},
+  reduceString: function reduceString(str, amount) {
+    const re = new RegExp(`(.)(?=\\1{${amount}})`, 'g');
+    return str.replace(re, '');
+  },
 
   /**
    * Reverses a string of text
